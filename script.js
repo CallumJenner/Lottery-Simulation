@@ -52,46 +52,42 @@ function runLottery() {
 }
 
 function addToWinningArray(matchingMainNumbers, matchingBonusNumbers) {
-
-    let mainArrPosition;
-    let bonusArrPosition;
-    let arrayPosition;
-
     for (let i = 0; i <= numberOfBonusBalls; i++) {
         for (let j = 0; j <= numberOfMainBalls; j++) {
-            if (j == matchingMainNumbers) {
-                mainArrPosition = j;
+            if (j == matchingMainNumbers && i == matchingBonusNumbers) {
+                winningArray[i, j]++;
             }
         }
-
-        if (i == matchingBonusNumbers) {
-            bonusArrPosition = i;
-        }
     }
-
-    if (bonusArrPosition === 0) {
-        arrayPosition = mainArrPosition;
-    } else {
-        arrayPosition = ((bonusArrPosition * numberOfMainBalls) + mainArrPosition);
-    }
-
-    winningArray[arrayPosition]++;
 }
 
 function printNumberOfEachMatch() {
     for (let i = 0; i <= numberOfBonusBalls; i++) {
         for (let j = 0; j <= numberOfMainBalls; j++) {
-            if (i === 0) {
-                console.log(`${j} - LS ${i} - ${winningArray[j]}`);
-            } else {
-                console.log(`${j} - LS ${i} - ${winningArray[(i * numberOfMainBalls) + j]}`);
-            }
-
+            console.log(`Main: ${j} - Bonus ${i} - ${winningArray[i][j]}`);
         }
     }
 }
 
-const numberOfSimulations = 50000;
+function createResultsArray() {
+    delArrTest = 0;
+    for (let i = 0; i <= numberOfBonusBalls; i++) {
+
+        winningArray.push([new Array(numberOfMainBalls + 1)]);
+        //winningArray[i].length = numberOfMainBalls + 1;
+
+        for (let j = 0; j <= numberOfMainBalls; j++) {
+            winningArray[i][j] = delArrTest;
+            delArrTest++;
+        }
+    }
+
+    console.log(winningArray[3, 0]);
+
+}
+
+
+const numberOfSimulations = 1;
 const maxMainNumber = 50;
 const maxBonusNumber = 12;
 const numberOfMainBalls = 5;
@@ -101,12 +97,11 @@ const ticketMainNumbers = [1, 2, 3, 4, 5];
 const ticketBonusNumbers = [1, 5];
 
 let winningArray = [];
-winningArray.length = (ticketMainNumbers.length + 1) * (ticketBonusNumbers.length + 1);
 
-for (let i = 0; i < winningArray.length; i++) {
-    winningArray[i] = 0;
-}
+createResultsArray();
 
 runLottery();
 
 printNumberOfEachMatch();
+
+// TODO - CREATE MULTI DIMENTIONAL ARRAY FOR WINNING QUANTITIES
